@@ -1,0 +1,23 @@
+name: Copy Zajel Source
+on:
+  push:
+    branches:
+      - main
+permissions:
+  contents: write
+jobs:
+  copy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          git clone --depth 1 https://github.com/ffgg35646-ops/zagl.git /tmp/src
+          rm -rf /tmp/src/.git
+          rm -rf ./*
+          cp -a /tmp/src/. .
+          rm -f .github/workflows/copy-zagl.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Copy source from zagl"
+          git push origin main
